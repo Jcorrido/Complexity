@@ -35,7 +35,7 @@ function FunctionBuilder()
 	// The number of parameters for functions
 	this.ParameterCount  = 0,
 	// Number of if statements/loops + 1
-	this.SimpleCyclomaticComplexity = 0;
+	this.SimpleCyclomaticComplexity = 1;
 	// The max depth of scopes (nested ifs, loops, etc)
 	this.MaxNestingDepth    = 0;
 	// The max number of conditions if one decision statement.
@@ -110,18 +110,51 @@ function complexity(filePath)
 	var fileBuilder = new FileBuilder();
 	fileBuilder.FileName = filePath;
 	fileBuilder.ImportCount = 0;
+	fileBuilder.Strings = 0;		//Line I added to complete 2b
 	builders[filePath] = fileBuilder;
+
 
 	// Tranverse program with a function visitor.
 	traverseWithParents(ast, function (node) 
-	{
-		if (node.type === 'FunctionDeclaration') 
-		{
-			var builder = new FunctionBuilder();
+	{	
+		// Lines I added to complete 2b
+		if (node.type === 'Literal') {
+			fileBuilder.Strings++;
+		}
+		// End of Lines I added to complete 2b
 
+	
+
+		if (node.type === 'FunctionDeclaration') {
+			var builder = new FunctionBuilder();
 			builder.FunctionName = functionName(node);
+			builder.ParameterCount = node.params.length; //Line I added to complete part 2a
 			builder.StartLine    = node.loc.start.line;
 
+			var conditionNum = [];
+			traverseWithParents(node, function (node) {
+				if (isDecision(node)) {
+					builder.SimpleCyclomaticComplexity++;
+
+					if (node.type === 'LogicalExpression') {
+						var increase = 0;
+						traverseWithParents(node, function (node) {
+							if ((node.operator === "&&") || (node.operator === "||")){
+								increase++;
+							}
+							if (increase > builder.MaxConditions) {
+								builder.MaxConditions = increase
+							}
+						})
+						conditionNum.add(increase);
+					
+					}
+					if (conditionNum.length > 0) {
+						builder.MaxConditions = Math.max(...conditionNum);
+					}
+				}
+			})
+			
 			builders[builder.FunctionName] = builder;
 		}
 
