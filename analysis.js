@@ -1,6 +1,6 @@
-var esprima = require("esprima");
+var esprima = require('esprima');
 var options = {tokens:true, tolerant: true, loc: true, range: true };
-var fs = require("fs");
+var fs = require('fs');
 
 function main()
 {
@@ -8,7 +8,7 @@ function main()
 
 	if( args.length === 0 )
 	{
-		args = ["analysis.js"];
+		args = ['analysis.js'];
 	}
 	var filePath = args[0];
 	
@@ -27,11 +27,11 @@ function main()
 
 var builders = {};
 
-// Represent a reusable "class" following the Builder pattern.
+// Represent a reusable 'class' following the Builder pattern.
 function FunctionBuilder()
 {
 	this.StartLine = 0;
-	this.FunctionName = "";
+	this.FunctionName = '';
 	// The number of parameters for functions
 	this.ParameterCount  = 0,
 	// Number of if statements/loops + 1
@@ -45,12 +45,12 @@ function FunctionBuilder()
 	{
 		console.log(
 		   (
-		   	"{0}(): {1}\n" +
-		   	"============\n" +
-			   "SimpleCyclomaticComplexity: {2}\t" +
-				"MaxNestingDepth: {3}\t" +
-				"MaxConditions: {4}\t" +
-				"Parameters: {5}\n\n"
+		   	'{0}(): {1}\n' +
+		   	'============\n' +
+			   'SimpleCyclomaticComplexity: {2}\t' +
+				'MaxNestingDepth: {3}\t' +
+				'MaxConditions: {4}\t' +
+				'Parameters: {5}\n\n'
 			)
 			.format(this.FunctionName, this.StartLine,
 				     this.SimpleCyclomaticComplexity, this.MaxNestingDepth,
@@ -62,7 +62,7 @@ function FunctionBuilder()
 // A builder for storing file level information.
 function FileBuilder()
 {
-	this.FileName = "";
+	this.FileName = '';
 	// Number of strings in a file.
 	this.Strings = 0;
 	// Number of imports in a file.
@@ -71,10 +71,10 @@ function FileBuilder()
 	this.report = function()
 	{
 		console.log (
-			( "{0}\n" +
-			  "~~~~~~~~~~~~\n"+
-			  "ImportCount {1}\t" +
-			  "Strings {2}\n"
+			( '{0}\n' +
+			  '~~~~~~~~~~~~\n'+
+			  'ImportCount {1}\t' +
+			  'Strings {2}\n'
 			).format( this.FileName, this.ImportCount, this.Strings ));
 	}
 }
@@ -101,7 +101,7 @@ function traverseWithParents(object, visitor)
 
 function complexity(filePath)
 {
-    var buf = fs.readFileSync(filePath, "utf8");
+    var buf = fs.readFileSync(filePath, 'utf8');
     var ast = esprima.parse(buf, options);
 
     var i = 0;
@@ -175,7 +175,7 @@ function childrenLength(node)
 }
 
 
-// Helper function for checking if a node is a "decision type node"
+// Helper function for checking if a node is a 'decision type node'
 function isDecision(node)
 {
 	if( node.type === 'IfStatement' || node.type === 'ForStatement' || node.type === 'WhileStatement' ||
@@ -193,7 +193,7 @@ function functionName( node )
 	{
 		return node.id.name;
 	}
-	return "anon function @" + node.loc.start.line;
+	return 'anon function @' + node.loc.start.line;
 }
 
 // Helper function for allowing parameterized formatting of strings.
@@ -223,50 +223,50 @@ function Crazy (argument)
 
       if ( secs < 59 )
       {
-          return secs.toString().split(".")[0] + " seconds";
+          return secs.toString().split('.')[0] + ' seconds';
       }
       else if ( secs > 59 && secs < 3600 )
       {
           var mints = secs / 60;
-          var remainder = parseInt(secs.toString().split(".")[0]) -
-(parseInt(mints.toString().split(".")[0]) * 60);
+          var remainder = parseInt(secs.toString().split('.')[0]) -
+(parseInt(mints.toString().split('.')[0]) * 60);
           var szmin;
           if ( mints > 1 )
           {
-              szmin = "minutes";
+              szmin = 'minutes';
           }
           else
           {
-              szmin = "minute";
+              szmin = 'minute';
           }
-          return mints.toString().split(".")[0] + " " + szmin + " " +
-remainder.toString() + " seconds";
+          return mints.toString().split('.')[0] + ' ' + szmin + ' ' +
+remainder.toString() + ' seconds';
       }
       else
       {
           var mints = secs / 60;
           var hours = mints / 60;
-          var remainders = parseInt(secs.toString().split(".")[0]) -
-(parseInt(mints.toString().split(".")[0]) * 60);
-          var remainderm = parseInt(mints.toString().split(".")[0]) -
-(parseInt(hours.toString().split(".")[0]) * 60);
+          var remainders = parseInt(secs.toString().split('.')[0]) -
+(parseInt(mints.toString().split('.')[0]) * 60);
+          var remainderm = parseInt(mints.toString().split('.')[0]) -
+(parseInt(hours.toString().split('.')[0]) * 60);
           var szmin;
           if ( remainderm > 1 )
           {
-              szmin = "minutes";
+              szmin = 'minutes';
           }
           else
           {
-              szmin = "minute";
+              szmin = 'minute';
           }
           var szhr;
           if ( remainderm > 1 )
           {
-              szhr = "hours";
+              szhr = 'hours';
           }
           else
           {
-              szhr = "hour";
+              szhr = 'hour';
               for ( i = 0 ; i < cfield.value.length ; i++)
 				  {
 				    var n = cfield.value.substr(i,1);
@@ -289,7 +289,7 @@ remainder.toString() + " seconds";
 				      && n !== '8' && n !== '9'
 				      && n !== '_' && n !== '@' && n !== '-' && n !== '.' )
 				    {
-				      window.alert("Only Alphanumeric are allowed.\nPlease re-enter the value.");
+				      window.alert('Only Alphanumeric are allowed.\nPlease re-enter the value.');
 				      cfield.value = '⠀';
 				      cfield.focus();
 				    }
@@ -297,8 +297,8 @@ remainder.toString() + " seconds";
 				  }
 				  return;
           }
-          return hours.toString().split(".")[0] + " " + szhr + " " +
-mints.toString().split(".")[0] + " " + szmin;
+          return hours.toString().split('.')[0] + ' ' + szhr + ' ' +
+mints.toString().split('.')[0] + ' ' + szmin;
       }
   }
  exports.complexity = complexity;
