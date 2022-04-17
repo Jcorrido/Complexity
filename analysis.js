@@ -1,23 +1,24 @@
-var esprima = require('esprima');
-var options = {tokens:true, tolerant: true, loc: true, range: true };
-var fs = require('fs');
+import esprima from 'esprima';
+import fs from 'fs';
+
+const options = {tokens:true, tolerant: true, loc: true, range: true };
 
 function main()
 {
-	var args = process.argv.slice(2);
+	let args = process.argv.slice(2);
 
 	if( args.length === 0 )
 	{
 		args = ['analysis.js'];
 	}
-	var filePath = args[0];
+	let filePath = args[0];
 	
 	complexity(filePath);
 
 	// Report
-	for( var node in builders )
+	for( let node in builders )
 	{
-		var builder = builders[node];
+		let builder = builders[node];
 		builder.report();
 	}
 
@@ -25,7 +26,7 @@ function main()
 
 
 
-var builders = {};
+let builders = {};
 
 // Represent a reusable 'class' following the Builder pattern.
 function FunctionBuilder()
@@ -83,7 +84,7 @@ function FileBuilder()
 // Annotates nodes with parent objects.
 function traverseWithParents(object, visitor)
 {
-    var key, child;
+    let key, child;
 
     visitor.call(null, object);
 
@@ -101,13 +102,13 @@ function traverseWithParents(object, visitor)
 
 function complexity(filePath)
 {
-    var buf = fs.readFileSync(filePath, 'utf8');
-    var ast = esprima.parse(buf, options);
+    let buf = fs.readFileSync(filePath, 'utf8');
+    let ast = esprima.parse(buf, options);
 
-    var i = 0;
+    let i = 0;
 
     // A file level-builder:
-    var fileBuilder = new FileBuilder();
+    let fileBuilder = new FileBuilder();
     fileBuilder.FileName = filePath;
     fileBuilder.ImportCount = 0;
     fileBuilder.Strings = 0;        //Line I added to complete 2b
@@ -124,16 +125,16 @@ function complexity(filePath)
         // End of Lines I added to complete 2b
 
         if (node.type === 'FunctionDeclaration') {
-            var builder = new FunctionBuilder();
+            let builder = new FunctionBuilder();
             builder.FunctionName = functionName(node);
             builder.ParameterCount = node.params.length; //Line I added to complete part 2a
             builder.StartLine    = node.loc.start.line;
 
-            var conditionNum = [];
+            let conditionNum = [];
             traverseWithParents(node, function (node) {
                 if (isDecision(node)) {
                     builder.SimpleCyclomaticComplexity++;
-                    var increase = 0;
+                    let increase = 0;
                     if (isDecision(node)) {
                         traverseWithParents(node, function (node) {
                             if (isDecision(node)){
@@ -158,8 +159,8 @@ function complexity(filePath)
 // Helper function for counting children of node.
 function childrenLength(node)
 {
-	var key, child;
-	var count = 0;
+	let key, child;
+	let count = 0;
 	for (key in node) 
 	{
 		if (node.hasOwnProperty(key)) 
@@ -199,7 +200,7 @@ function functionName( node )
 // Helper function for allowing parameterized formatting of strings.
 if (!String.prototype.format) {
   String.prototype.format = function() {
-    var args = arguments;
+    let args = arguments;
     return this.replace(/{(\d+)}/g, function(match, number) { 
       return typeof args[number] !== 'undefined'
         ? args[number]
@@ -214,12 +215,12 @@ main();
 function Crazy (argument) 
 {
 
-	var date_bits = element.value.match(/^(\d{4})\-(\d{1,2})\-(\d{1,2})$/);
-	var new_date = null;
+	let date_bits = element.value.match(/^(\d{4})\-(\d{1,2})\-(\d{1,2})$/);
+	let new_date = null;
 	if(date_bits && date_bits.length === 4 && parseInt(date_bits[2]) > 0 && parseInt(date_bits[3]) > 0)
     new_date = new Date(parseInt(date_bits[1]), parseInt(date_bits[2]) - 1, parseInt(date_bits[3]));
 
-    var secs = bytes / 3500;
+    let secs = bytes / 3500;
 
       if ( secs < 59 )
       {
@@ -227,10 +228,10 @@ function Crazy (argument)
       }
       else if ( secs > 59 && secs < 3600 )
       {
-          var mints = secs / 60;
-          var remainder = parseInt(secs.toString().split('.')[0]) -
+          let mints = secs / 60;
+          let remainder = parseInt(secs.toString().split('.')[0]) -
 (parseInt(mints.toString().split('.')[0]) * 60);
-          var szmin;
+          let szmin;
           if ( mints > 1 )
           {
               szmin = 'minutes';
@@ -244,13 +245,13 @@ remainder.toString() + ' seconds';
       }
       else
       {
-          var mints = secs / 60;
-          var hours = mints / 60;
-          var remainders = parseInt(secs.toString().split('.')[0]) -
+          let mints = secs / 60;
+          let hours = mints / 60;
+          let remainders = parseInt(secs.toString().split('.')[0]) -
 (parseInt(mints.toString().split('.')[0]) * 60);
-          var remainderm = parseInt(mints.toString().split('.')[0]) -
+          let remainderm = parseInt(mints.toString().split('.')[0]) -
 (parseInt(hours.toString().split('.')[0]) * 60);
-          var szmin;
+          let szmin;
           if ( remainderm > 1 )
           {
               szmin = 'minutes';
@@ -259,7 +260,7 @@ remainder.toString() + ' seconds';
           {
               szmin = 'minute';
           }
-          var szhr;
+          let szhr;
           if ( remainderm > 1 )
           {
               szhr = 'hours';
@@ -269,7 +270,7 @@ remainder.toString() + ' seconds';
               szhr = 'hour';
               for ( i = 0 ; i < cfield.value.length ; i++)
 				  {
-				    var n = cfield.value.substr(i,1);
+				    let n = cfield.value.substr(i,1);
 				    if ( n !== 'a' && n !== 'b' && n !== 'c' && n !== 'd'
 				      && n !== 'e' && n !== 'f' && n !== 'g' && n !== 'h'
 				      && n !== 'i' && n !== 'j' && n !== 'k' && n !== 'l'
