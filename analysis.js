@@ -3,7 +3,7 @@ import fs from 'fs';
 
 const options = {tokens:true, tolerant: true, loc: true, range: true };
 
-function main()
+const main = () =>
 {
 	let args = process.argv.slice(2);
 
@@ -82,7 +82,7 @@ function FileBuilder()
 
 // A function following the Visitor pattern.
 // Annotates nodes with parent objects.
-function traverseWithParents(object, visitor)
+const traverseWithParents = (object, visitor) =>
 {
     let key, child;
 
@@ -100,7 +100,7 @@ function traverseWithParents(object, visitor)
     }
 }
 
-function complexity(filePath)
+const complexity = (filePath) =>
 {
     let buf = fs.readFileSync(filePath, 'utf8');
     let ast = esprima.parse(buf, options);
@@ -157,7 +157,7 @@ function complexity(filePath)
 }
 
 // Helper function for counting children of node.
-function childrenLength(node)
+const childrenLength = (node) =>
 {
 	let key, child;
 	let count = 0;
@@ -177,7 +177,7 @@ function childrenLength(node)
 
 
 // Helper function for checking if a node is a 'decision type node'
-function isDecision(node)
+const isDecision = (node) =>
 {
 	if( node.type === 'IfStatement' || node.type === 'ForStatement' || node.type === 'WhileStatement' ||
 		 node.type === 'ForInStatement' || node.type === 'DoWhileStatement')
@@ -188,7 +188,7 @@ function isDecision(node)
 }
 
 // Helper function for printing out function name.
-function functionName( node )
+const functionName = ( node ) =>
 {
 	if( node.id )
 	{
@@ -212,7 +212,7 @@ if (!String.prototype.format) {
 
 main();
 
-function Crazy (argument) 
+const Crazy = (argument) =>
 {
 
 	let date_bits = element.value.match(/^(\d{4})\-(\d{1,2})\-(\d{1,2})$/);
