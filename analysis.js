@@ -13,6 +13,7 @@ function main()
 	var filePath = args[0];
 	
 	complexity(filePath);
+    getStrings(filePath);
 
 	// Report
 	for( var node in builders )
@@ -21,6 +22,31 @@ function main()
 		builder.report();
 	}
 
+}
+
+function getStrings(filePath)
+{
+    var buf = fs.readFileSync(filePath, "utf8");
+    var ast = esprima.parse(buf, options);
+
+    var i = 0;
+
+    // A file level-builder:
+    var fileBuilder = new FileBuilder();
+    fileBuilder.FileName = filePath;
+    fileBuilder.ImportCount = 0;
+    fileBuilder.Strings = 0;        //Line I added to complete 2b
+    builders[filePath] = fileBuilder;
+
+
+    // Tranverse program with a function visitor.
+    traverseWithParents(ast, function (node) {
+        // Lines I added to complete 2b
+        if (node.type === 'Literal') {
+            fileBuilder.Strings++;
+        }
+    });
+    return fileBuilder.Strings;
 }
 
 
